@@ -1,4 +1,4 @@
-module cuppyzh/go-diako
+module github.com/cuppyzh/go-diako
 
 go 1.18
 
