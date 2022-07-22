@@ -22,11 +22,10 @@ func InitRouter() *gin.Engine {
 // Used to add Diako router to existing Gin engine
 func SetupRouter(router *gin.Engine) {
 	setAuthenticationApi(&router.RouterGroup)
-	router.POST("/api/diako/message", apiDiakoMessageHandler)
 }
 
 func setAuthenticationApi(router *gin.RouterGroup) {
-	authorized := router.Group("/api/diako", gin.BasicAuth(gin.Accounts{
+	authorized := router.Group("/", gin.BasicAuth(gin.Accounts{
 		os.Getenv("DIAKO_AUTH_USERNAME"): os.Getenv("DIAKO_AUTH_PASSWORD"),
 	}))
 
