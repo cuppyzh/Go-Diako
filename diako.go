@@ -3,6 +3,7 @@ package diako
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,16 +15,25 @@ func Start() {
 // Used to init Gin engine along with Diako router
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	router.POST("/api/diako/message", ApiDiakoMessageHandler)
+	setAuthenticationApi(&router.RouterGroup)
 	return router
 }
 
 // Used to add Diako router to existing Gin engine
 func SetupRouter(router *gin.Engine) {
-	router.POST("/api/diako/message", ApiDiakoMessageHandler)
+	setAuthenticationApi(&router.RouterGroup)
+	router.POST("/api/diako/message", apiDiakoMessageHandler)
 }
 
-func ApiDiakoMessageHandler(context *gin.Context) {
+func setAuthenticationApi(router *gin.RouterGroup) {
+	authorized := router.Group("/api/diako", gin.BasicAuth(gin.Accounts{
+		os.Getenv("DIAKO_AUTH_USERNAME"): os.Getenv("DIAKO_AUTH_PASSWORD"),
+	}))
+
+	authorized.POST("/api/diako/message", apiDiakoMessageHandler)
+}
+
+func apiDiakoMessageHandler(context *gin.Context) {
 	var request MessageRequest
 
 	if err := context.ShouldBindJSON(&request); err != nil {
@@ -37,8 +47,4 @@ func ApiDiakoMessageHandler(context *gin.Context) {
 
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
-}
-
-func Test() {
-	log.Println("Test Dependencies")
 }
