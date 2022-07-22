@@ -38,3 +38,7 @@ func ApiDiakoMessageHandler(context *gin.Context) {
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
+
+func Test() {
+	log.Println("Test Dependencies")
+}
