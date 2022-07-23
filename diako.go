@@ -1,11 +1,11 @@
 package diako
 
 import (
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gookit/event"
 )
 
 func Start() {
@@ -25,6 +25,7 @@ func SetupRouter(router *gin.Engine) {
 }
 
 func setAuthenticationApi(router *gin.RouterGroup) {
+
 	authorized := router.Group("/", gin.BasicAuth(gin.Accounts{
 		os.Getenv("DIAKO_AUTH_USERNAME"): os.Getenv("DIAKO_AUTH_PASSWORD"),
 	}))
@@ -40,7 +41,15 @@ func apiDiakoMessageHandler(context *gin.Context) {
 		return
 	}
 
-	log.Println("Test: " + request.Sender)
+	eventData := &event.BasicEvent{}
+	eventData.SetName("diako.message.recieved")
+	eventData.SetData(event.M{
+		"Sender":  request.Sender,
+		"Message": request.Message,
+	})
+
+	event.FireEvent(eventData)
+
 	context.String(http.StatusOK, "")
 }
 
