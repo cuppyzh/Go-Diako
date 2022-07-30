@@ -1,6 +1,7 @@
 package diako
 
 import (
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -47,7 +48,10 @@ func apiDiakoMessageHandler(context *gin.Context) {
 		return
 	}
 
+	log.Println(request)
+
 	if !shallSendTheMessage(request) {
+		log.Println("Message will not be forwarded")
 		return
 	}
 
