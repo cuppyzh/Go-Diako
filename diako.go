@@ -1,6 +1,7 @@
 package diako
 
 import (
+	"fmt"
 	"math"
 	"net/http"
 	"os"
@@ -46,6 +47,8 @@ func apiDiakoMessageHandler(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+
+	fmt.Println(request)
 
 	if !shallSendTheMessage(request) {
 		return
