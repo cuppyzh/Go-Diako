@@ -1,7 +1,7 @@
 package diako
 
 import (
-	"fmt"
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -48,7 +48,7 @@ func apiDiakoMessageHandler(context *gin.Context) {
 		return
 	}
 
-	fmt.Println(request)
+	log.Println(request)
 
 	if !shallSendTheMessage(request) {
 		return
