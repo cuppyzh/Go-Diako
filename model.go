@@ -1,6 +1,7 @@
 package diako
 
 import (
+	"log"
 	"strconv"
 	"time"
 
@@ -23,6 +24,9 @@ func (e *DiakoMessageReceivedEventData) GetMessageData() MessageRequest {
 }
 
 func (messageRequest MessageRequest) GetTime() time.Time {
+	log.Println("Parse GetTime()")
+	log.Println(messageRequest)
+
 	parsedInt, err := strconv.ParseInt(messageRequest.Timestamp, 10, 64)
 	if err != nil {
 		panic(err)

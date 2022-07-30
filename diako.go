@@ -50,12 +50,9 @@ func apiDiakoMessageHandler(context *gin.Context) {
 
 	log.Println(request)
 
-	flag := shallSendTheMessage(request)
-
-	if flag {
-		log.Println("SEND")
-	} else {
-		log.Println("NOT SEND")
+	if !shallSendTheMessage(request) {
+		log.Println("Message will not be forwarded")
+		return
 	}
 
 	eventData := &event.BasicEvent{}
